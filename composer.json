@@ -1,0 +1,14 @@
+{
+    "name": "semen/forum-api",
+    "description": "Forum API in vanilla PHP - module 15 back-end",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
