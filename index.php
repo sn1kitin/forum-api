@@ -2,9 +2,12 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Database\Database;
+use App\Http\ApiResponse;
 
-header('Content-Type: application/json; charset=utf-8');
-
-$db = new Database();
-
-echo json_encode(['message' => 'Verbinding met database gelukt']);
+try {
+    $db = new Database();
+    ApiResponse::send(['message' => 'Verbinding met database gelukt']);
+} catch (Throwable $e) {
+    error_log($e->getMessage());
+    ApiResponse::error(ApiResponse::SERVER_ERROR, 'Er is iets misgegaan op de server.');
+}
