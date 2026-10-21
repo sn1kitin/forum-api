@@ -1,13 +1,16 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
-use App\Database\Database;
 use App\Http\ApiResponse;
+use App\Http\RequestHandler;
 
 try {
-    $db = new Database();
-    ApiResponse::send(['message' => 'Verbinding met database gelukt']);
+    $routes = require __DIR__ . '/app/Routes/routes.php';
+
+    $handler = new RequestHandler($routes);
+    $handler->handle();
 } catch (Throwable $e) {
+    // echte fout alleen in de log, niet naar de client
     error_log($e->getMessage());
     ApiResponse::error(ApiResponse::SERVER_ERROR, 'Er is iets misgegaan op de server.');
 }
