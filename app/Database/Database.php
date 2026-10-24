@@ -21,7 +21,10 @@ class Database
             "mysql:host={$this->host};dbname={$this->dbName};charset=utf8mb4",
             $this->user,
             $this->pass,
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]
         );
     }
 
