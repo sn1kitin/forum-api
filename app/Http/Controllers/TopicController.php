@@ -9,16 +9,12 @@ class TopicController
     // GET /topics
     public function index(): void
     {
-        $model = new TopicModel();
-
-        ApiResponse::send($model->all());
+        ApiResponse::send(TopicModel::all());
     }
 
     // GET /topics/{id}
     public function show(int $id): void
     {
-        $model = new TopicModel();
-
-        ApiResponse::send($model->find($id));
+        ApiResponse::send(TopicModel::find($id));
     }
 }

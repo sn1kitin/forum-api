@@ -1,28 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\Database\Database;
-
-class ReplyModel
+class ReplyModel extends Model
 {
-    private Database $db;
-
-    public function __construct()
-    {
-        $this->db = new Database();
-    }
-
-    public function all(): array
-    {
-        $this->db->query('SELECT * FROM `replies`');
-
-        return $this->db->fetchAll();
-    }
-
-    public function find(int $id): ?array
-    {
-        $this->db->query('SELECT * FROM `replies` WHERE `id` = :id', ['id' => $id]);
-
-        return $this->db->fetch();
-    }
+    protected static string $table = 'replies';
 }

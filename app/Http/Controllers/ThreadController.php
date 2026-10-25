@@ -9,16 +9,12 @@ class ThreadController
     // GET /threads
     public function index(): void
     {
-        $model = new ThreadModel();
-
-        ApiResponse::send($model->all());
+        ApiResponse::send(ThreadModel::all());
     }
 
     // GET /threads/{id}
     public function show(int $id): void
     {
-        $model = new ThreadModel();
-
-        ApiResponse::send($model->find($id));
+        ApiResponse::send(ThreadModel::find($id));
     }
 }
