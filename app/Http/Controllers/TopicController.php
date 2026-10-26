@@ -15,6 +15,12 @@ class TopicController
     // GET /topics/{id}
     public function show(int $id): void
     {
-        ApiResponse::send(TopicModel::find($id));
+        $topic = TopicModel::find($id);
+
+        if ($topic === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$id} bestaat niet.");
+        }
+
+        ApiResponse::send($topic);
     }
 }

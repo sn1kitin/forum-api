@@ -15,6 +15,12 @@ class ReplyController
     // GET /replies/{id}
     public function show(int $id): void
     {
-        ApiResponse::send(ReplyModel::find($id));
+        $reply = ReplyModel::find($id);
+
+        if ($reply === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Reply {$id} bestaat niet.");
+        }
+
+        ApiResponse::send($reply);
     }
 }

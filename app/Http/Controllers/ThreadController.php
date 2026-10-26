@@ -15,6 +15,12 @@ class ThreadController
     // GET /threads/{id}
     public function show(int $id): void
     {
-        ApiResponse::send(ThreadModel::find($id));
+        $thread = ThreadModel::find($id);
+
+        if ($thread === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Thread {$id} bestaat niet.");
+        }
+
+        ApiResponse::send($thread);
     }
 }

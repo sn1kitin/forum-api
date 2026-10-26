@@ -6,14 +6,22 @@ class RequestHandler
     private array $routes;
     private string $method;
     private string $resource;
-    private ?string $id;
+    private ?int $id = null;
 
     public function __construct(array $routes)
     {
         $this->routes = $routes;
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
         $this->resource = strtolower($_GET['resource'] ?? '');
-        $this->id = $_GET['id'] ?? null;
+
+        if (isset($_GET['id'])) {
+            // /threads/abc gaf eerst een 500 error
+            if (!ctype_digit($_GET['id']) || (int) $_GET['id'] < 1) {
+                ApiResponse::error(ApiResponse::BAD_REQUEST, 'Het id moet een positief geheel getal zijn.');
+            }
+
+            $this->id = (int) $_GET['id'];
+        }
     }
 
     public function handle(): void
