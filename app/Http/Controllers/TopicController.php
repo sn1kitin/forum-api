@@ -2,10 +2,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\ApiResponse;
+use App\Models\ThreadModel;
 use App\Models\TopicModel;
 
-class TopicController
+class TopicController extends Controller
 {
+    private const RULES = [
+        'title' => 'required|string|max:100',
+        'body' => 'required|string',
+        'thread_id' => 'required|int|exists:' . ThreadModel::class,
+        'user_id' => 'required|int',
+    ];
+
     // GET /topics
     public function index(): void
     {
@@ -27,29 +35,7 @@ class TopicController
     // POST /topics
     public function create(array $data): void
     {
-        $errors = [];
-
-        if (empty($data['title'])) {
-            $errors['title'] = 'Het veld title is verplicht.';
-        } elseif (mb_strlen($data['title']) > 100) {
-            $errors['title'] = 'Het veld title mag maximaal 100 tekens zijn.';
-        }
-
-        if (empty($data['body'])) {
-            $errors['body'] = 'Het veld body is verplicht.';
-        }
-
-        if (empty($data['thread_id']) || !ctype_digit((string) $data['thread_id'])) {
-            $errors['thread_id'] = 'Het veld thread_id moet een getal zijn.';
-        }
-
-        if (empty($data['user_id']) || !ctype_digit((string) $data['user_id'])) {
-            $errors['user_id'] = 'Het veld user_id moet een getal zijn.';
-        }
-
-        if (!empty($errors)) {
-            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
-        }
+        $this->validate($data, self::RULES);
 
         $topic = TopicModel::create($data);
 

@@ -3,9 +3,16 @@ namespace App\Http\Controllers;
 
 use App\Http\ApiResponse;
 use App\Models\ReplyModel;
+use App\Models\TopicModel;
 
-class ReplyController
+class ReplyController extends Controller
 {
+    private const RULES = [
+        'body' => 'required|string',
+        'topic_id' => 'required|int|exists:' . TopicModel::class,
+        'user_id' => 'required|int',
+    ];
+
     // GET /replies
     public function index(): void
     {
@@ -27,23 +34,7 @@ class ReplyController
     // POST /replies
     public function create(array $data): void
     {
-        $errors = [];
-
-        if (empty($data['body'])) {
-            $errors['body'] = 'Het veld body is verplicht.';
-        }
-
-        if (empty($data['topic_id']) || !ctype_digit((string) $data['topic_id'])) {
-            $errors['topic_id'] = 'Het veld topic_id moet een getal zijn.';
-        }
-
-        if (empty($data['user_id']) || !ctype_digit((string) $data['user_id'])) {
-            $errors['user_id'] = 'Het veld user_id moet een getal zijn.';
-        }
-
-        if (!empty($errors)) {
-            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
-        }
+        $this->validate($data, self::RULES);
 
         $reply = ReplyModel::create($data);
 
