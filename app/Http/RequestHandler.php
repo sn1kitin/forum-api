@@ -24,6 +24,30 @@ class RequestHandler
         }
     }
 
+    // json body of gewone formdata
+    private function getBody(): array
+    {
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+        if (str_contains($contentType, 'application/json')) {
+            $body = file_get_contents('php://input');
+
+            if (trim($body) === '') {
+                return [];
+            }
+
+            $data = json_decode($body, true);
+
+            if (!is_array($data)) {
+                ApiResponse::error(ApiResponse::BAD_REQUEST, 'De body bevat geen geldige JSON.');
+            }
+
+            return $data;
+        }
+
+        return $_POST;
+    }
+
     public function handle(): void
     {
         // threads of threads/{id}
@@ -45,7 +69,7 @@ class RequestHandler
         }
 
         if ($this->method === 'POST') {
-            $args[] = $_POST;
+            $args[] = $this->getBody();
         }
 
         $controller->$action(...$args);
