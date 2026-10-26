@@ -23,4 +23,31 @@ class ReplyController
 
         ApiResponse::send($reply);
     }
+
+    // POST /replies
+    public function create(array $data): void
+    {
+        $errors = [];
+
+        if (empty($data['body'])) {
+            $errors['body'] = 'Het veld body is verplicht.';
+        }
+
+        if (empty($data['topic_id']) || !ctype_digit((string) $data['topic_id'])) {
+            $errors['topic_id'] = 'Het veld topic_id moet een getal zijn.';
+        }
+
+        if (empty($data['user_id']) || !ctype_digit((string) $data['user_id'])) {
+            $errors['user_id'] = 'Het veld user_id moet een getal zijn.';
+        }
+
+        if (!empty($errors)) {
+            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
+        }
+
+        $reply = ReplyModel::create($data);
+
+        header('Location: ' . ApiResponse::url('replies/' . $reply['id']));
+        ApiResponse::send($reply, ApiResponse::CREATED);
+    }
 }

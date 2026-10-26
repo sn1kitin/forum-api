@@ -16,5 +16,7 @@ return [
     ],
     'POST' => [
         'threads' => [ThreadController::class, 'create'],
+        'topics' => [TopicController::class, 'create'],
+        'replies' => [ReplyController::class, 'create'],
     ],
 ];
