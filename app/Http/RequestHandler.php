@@ -38,10 +38,16 @@ class RequestHandler
         [$class, $action] = $route;
         $controller = new $class();
 
-        if ($this->id === null) {
-            $controller->$action();
-        } else {
-            $controller->$action($this->id);
+        $args = [];
+
+        if ($this->id !== null) {
+            $args[] = $this->id;
         }
+
+        if ($this->method === 'POST') {
+            $args[] = $_POST;
+        }
+
+        $controller->$action(...$args);
     }
 }

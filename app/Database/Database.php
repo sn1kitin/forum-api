@@ -41,6 +41,11 @@ class Database
         return $row === false ? null : $row;
     }
 
+    public function lastId(): int
+    {
+        return (int) $this->pdo->lastInsertId();
+    }
+
     public function fetchAll(): array
     {
         return $this->stmt->fetchAll();

@@ -14,4 +14,7 @@ return [
         'replies' => [ReplyController::class, 'index'],
         'replies/{id}' => [ReplyController::class, 'show'],
     ],
+    'POST' => [
+        'threads' => [ThreadController::class, 'create'],
+    ],
 ];

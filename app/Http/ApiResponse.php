@@ -10,6 +10,7 @@ class ApiResponse
     public const CREATED = 201;
     public const BAD_REQUEST = 400;
     public const NOT_FOUND = 404;
+    public const UNPROCESSABLE = 422;
     public const SERVER_ERROR = 500;
 
     private const MESSAGES = [
@@ -17,6 +18,7 @@ class ApiResponse
         201 => 'Created',
         400 => 'Bad Request',
         404 => 'Not Found',
+        422 => 'Unprocessable Content',
         500 => 'Internal Server Error',
     ];
 
@@ -31,15 +33,30 @@ class ApiResponse
         exit;
     }
 
-    public static function error(int $status, string $message): void
+    public static function error(int $status, string $message, array $details = []): void
     {
         self::headers($status);
 
+        $error = ['message' => $message];
+
+        if (!empty($details)) {
+            $error['details'] = $details;
+        }
+
         $response = self::base($status, 0);
-        $response['error'] = ['message' => $message];
+        $response['error'] = $error;
 
         echo self::toJson($response);
         exit;
+    }
+
+    // volledige url voor de Location header, bv http://localhost/forum-api/threads/5
+    public static function url(string $path): string
+    {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+
+        return "{$scheme}://{$_SERVER['HTTP_HOST']}{$base}/{$path}";
     }
 
     private static function headers(int $status): void
