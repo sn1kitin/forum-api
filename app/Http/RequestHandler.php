@@ -48,6 +48,19 @@ class RequestHandler
         return $_POST;
     }
 
+    private function allowedMethods(string $key): array
+    {
+        $allowed = [];
+
+        foreach ($this->routes as $method => $routes) {
+            if (isset($routes[$key])) {
+                $allowed[] = $method;
+            }
+        }
+
+        return $allowed;
+    }
+
     public function handle(): void
     {
         // threads of threads/{id}
@@ -56,6 +69,14 @@ class RequestHandler
         $route = $this->routes[$this->method][$key] ?? null;
 
         if ($route === null) {
+            $allowed = $this->allowedMethods($key);
+
+            // url bestaat wel maar niet met deze methode
+            if (!empty($allowed)) {
+                header('Allow: ' . implode(', ', $allowed));
+                ApiResponse::error(ApiResponse::METHOD_NOT_ALLOWED, "De methode {$this->method} is niet toegestaan voor deze url.");
+            }
+
             ApiResponse::error(ApiResponse::NOT_FOUND, 'Deze route bestaat niet.');
         }
 
