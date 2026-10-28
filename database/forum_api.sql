@@ -21,7 +21,8 @@ CREATE TABLE `threads` (
     `title` VARCHAR(100) NOT NULL,
     `description` TEXT NOT NULL,
     `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `updated_at` DATETIME NULL DEFAULT NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `topics` (
@@ -31,7 +32,9 @@ CREATE TABLE `topics` (
     `title` VARCHAR(100) NOT NULL,
     `body` TEXT NOT NULL,
     `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `updated_at` DATETIME NULL DEFAULT NULL,
+    FOREIGN KEY (`thread_id`) REFERENCES `threads` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `replies` (
@@ -40,7 +43,9 @@ CREATE TABLE `replies` (
     `user_id` INT UNSIGNED NOT NULL,
     `body` TEXT NOT NULL,
     `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `updated_at` DATETIME NULL DEFAULT NULL,
+    FOREIGN KEY (`topic_id`) REFERENCES `topics` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `users` (`username`, `email`, `password`, `created_at`) VALUES
