@@ -22,4 +22,9 @@ return [
         'topics' => [TopicController::class, 'create'],
         'replies' => [ReplyController::class, 'create'],
     ],
+    'DELETE' => [
+        'threads/{id}' => [ThreadController::class, 'destroy'],
+        'topics/{id}' => [TopicController::class, 'destroy'],
+        'replies/{id}' => [ReplyController::class, 'destroy'],
+    ],
 ];

@@ -50,4 +50,9 @@ class Database
     {
         return $this->stmt->fetchAll();
     }
+
+    public function rowCount(): int
+    {
+        return $this->stmt->rowCount();
+    }
 }

@@ -70,4 +70,18 @@ class ThreadController extends Controller
         header('Location: ' . ApiResponse::url('threads/' . $thread['id']));
         ApiResponse::send($thread, ApiResponse::CREATED);
     }
+
+    // DELETE /threads/{id} -> geeft terug wat er verwijderd is
+    public function destroy(int $id): void
+    {
+        $thread = ThreadModel::find($id);
+
+        if ($thread === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Thread {$id} bestaat niet.");
+        }
+
+        ThreadModel::delete($id);
+
+        ApiResponse::send($thread);
+    }
 }

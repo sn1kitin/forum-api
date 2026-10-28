@@ -57,4 +57,18 @@ class TopicController extends Controller
         header('Location: ' . ApiResponse::url('topics/' . $topic['id']));
         ApiResponse::send($topic, ApiResponse::CREATED);
     }
+
+    // DELETE /topics/{id} -> geeft terug wat er verwijderd is
+    public function destroy(int $id): void
+    {
+        $topic = TopicModel::find($id);
+
+        if ($topic === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$id} bestaat niet.");
+        }
+
+        TopicModel::delete($id);
+
+        ApiResponse::send($topic);
+    }
 }

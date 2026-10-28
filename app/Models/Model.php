@@ -67,4 +67,13 @@ abstract class Model
 
         return static::find(self::db()->lastId());
     }
+
+    // true als er echt iets verwijderd is
+    public static function delete(int $id): bool
+    {
+        $table = static::$table;
+        self::db()->query("DELETE FROM `{$table}` WHERE `id` = :id", ['id' => $id]);
+
+        return self::db()->rowCount() > 0;
+    }
 }

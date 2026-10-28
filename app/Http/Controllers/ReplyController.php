@@ -41,4 +41,18 @@ class ReplyController extends Controller
         header('Location: ' . ApiResponse::url('replies/' . $reply['id']));
         ApiResponse::send($reply, ApiResponse::CREATED);
     }
+
+    // DELETE /replies/{id} -> geeft terug wat er verwijderd is
+    public function destroy(int $id): void
+    {
+        $reply = ReplyModel::find($id);
+
+        if ($reply === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Reply {$id} bestaat niet.");
+        }
+
+        ReplyModel::delete($id);
+
+        ApiResponse::send($reply);
+    }
 }
