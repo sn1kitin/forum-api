@@ -42,6 +42,15 @@ abstract class Model
         return self::db()->fetch();
     }
 
+    // alle rijen waar een kolom een bepaalde waarde heeft, bv alle topics van een thread
+    public static function where(string $column, mixed $value): array
+    {
+        $table = static::$table;
+        self::db()->query("SELECT * FROM `{$table}` WHERE `{$column}` = :value", ['value' => $value]);
+
+        return self::db()->fetchAll();
+    }
+
     public static function create(array $data): array
     {
         $table = static::$table;

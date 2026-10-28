@@ -2,13 +2,8 @@
     Options -MultiViews -Indexes
     RewriteEngine On
 
-    # /threads/5 -> index.php?resource=threads&id=5
+    # alles naar index.php, de url wordt uitgelezen in de RequestHandler
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z]+)/([^/]+)$ index.php?resource=$1&id=$2 [QSA,L]
-
-    # /threads -> index.php?resource=threads
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^([a-zA-Z]+)$ index.php?resource=$1 [QSA,L]
+    RewriteRule ^ index.php [QSA,L]
 </IfModule>

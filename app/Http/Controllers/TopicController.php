@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\ApiResponse;
+use App\Models\ReplyModel;
 use App\Models\ThreadModel;
 use App\Models\TopicModel;
 
@@ -28,6 +29,20 @@ class TopicController extends Controller
         if ($topic === null) {
             ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$id} bestaat niet.");
         }
+
+        ApiResponse::send($topic);
+    }
+
+    // GET /topics/{id}/replies -> topic met al zijn replies
+    public function replies(int $id): void
+    {
+        $topic = TopicModel::find($id);
+
+        if ($topic === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$id} bestaat niet.");
+        }
+
+        $topic['replies'] = ReplyModel::where('topic_id', $id);
 
         ApiResponse::send($topic);
     }
