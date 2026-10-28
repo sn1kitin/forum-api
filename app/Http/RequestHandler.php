@@ -63,6 +63,11 @@ class RequestHandler
 
     public function handle(): void
     {
+        // CORS preflight van de browser
+        if ($this->method === 'OPTIONS') {
+            ApiResponse::preflight();
+        }
+
         // threads of threads/{id}
         $key = $this->id === null ? $this->resource : $this->resource . '/{id}';
 

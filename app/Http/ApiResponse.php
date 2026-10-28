@@ -52,6 +52,17 @@ class ApiResponse
         exit;
     }
 
+    // antwoord op de preflight van de browser (OPTIONS)
+    public static function preflight(): void
+    {
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Accept');
+        header('Access-Control-Max-Age: 86400');
+
+        // ook hier de vaste json structuur
+        self::send(null);
+    }
+
     // volledige url voor de Location header, bv http://localhost/forum-api/threads/5
     public static function url(string $path): string
     {
@@ -64,6 +75,8 @@ class ApiResponse
     private static function headers(int $status): void
     {
         http_response_code($status);
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Expose-Headers: Location');
         header('Content-Type: application/json; charset=utf-8');
     }
 
