@@ -55,7 +55,7 @@ class ApiResponse
     // antwoord op de preflight van de browser (OPTIONS)
     public static function preflight(): void
     {
-        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Accept');
         header('Access-Control-Max-Age: 86400');
 

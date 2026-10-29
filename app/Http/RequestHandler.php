@@ -113,7 +113,7 @@ class RequestHandler
         // eerst de ids uit de url, daarna de body
         $args = $this->ids;
 
-        if ($this->method === 'POST') {
+        if (in_array($this->method, ['POST', 'PUT', 'PATCH'])) {
             $args[] = $this->getBody();
         }
 

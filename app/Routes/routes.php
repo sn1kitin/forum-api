@@ -22,6 +22,17 @@ return [
         'topics' => [TopicController::class, 'create'],
         'replies' => [ReplyController::class, 'create'],
     ],
+    // PUT = alle velden, PATCH = alleen wat je meestuurt
+    'PUT' => [
+        'threads/{id}' => [ThreadController::class, 'update'],
+        'topics/{id}' => [TopicController::class, 'update'],
+        'replies/{id}' => [ReplyController::class, 'update'],
+    ],
+    'PATCH' => [
+        'threads/{id}' => [ThreadController::class, 'patch'],
+        'topics/{id}' => [TopicController::class, 'patch'],
+        'replies/{id}' => [ReplyController::class, 'patch'],
+    ],
     'DELETE' => [
         'threads/{id}' => [ThreadController::class, 'destroy'],
         'topics/{id}' => [TopicController::class, 'destroy'],

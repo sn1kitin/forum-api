@@ -42,6 +42,29 @@ class ReplyController extends Controller
         ApiResponse::send($reply, ApiResponse::CREATED);
     }
 
+    // PUT /replies/{id}
+    public function update(int $id, array $data): void
+    {
+        $this->save($id, $data, false);
+    }
+
+    // PATCH /replies/{id}
+    public function patch(int $id, array $data): void
+    {
+        $this->save($id, $data, true);
+    }
+
+    private function save(int $id, array $data, bool $partial): void
+    {
+        if (ReplyModel::find($id) === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Reply {$id} bestaat niet.");
+        }
+
+        $this->validate($data, self::RULES, $partial);
+
+        ApiResponse::send(ReplyModel::update($id, $data));
+    }
+
     // DELETE /replies/{id} -> geeft terug wat er verwijderd is
     public function destroy(int $id): void
     {

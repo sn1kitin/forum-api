@@ -68,6 +68,24 @@ abstract class Model
         return static::find(self::db()->lastId());
     }
 
+    public static function update(int $id, array $data): ?array
+    {
+        $table = static::$table;
+
+        $data = static::onlyFillable($data);
+        $data['updated_at'] = date('Y-m-d H:i:s');
+
+        $sets = [];
+        foreach (array_keys($data) as $column) {
+            $sets[] = "`{$column}` = :{$column}";
+        }
+
+        $data['id'] = $id;
+        self::db()->query("UPDATE `{$table}` SET " . implode(', ', $sets) . " WHERE `id` = :id", $data);
+
+        return static::find($id);
+    }
+
     // true als er echt iets verwijderd is
     public static function delete(int $id): bool
     {

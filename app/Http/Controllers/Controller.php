@@ -6,13 +6,22 @@ use App\Http\ApiResponse;
 abstract class Controller
 {
     // regels zoals 'required|string|max:100', stuurt meteen een 422 als er fouten zijn
-    protected function validate(array $data, array $rules): void
+    // $partial is voor PATCH, dan worden alleen de meegestuurde velden gecontroleerd
+    protected function validate(array $data, array $rules, bool $partial = false): void
     {
         $errors = [];
+
+        if ($partial && empty(array_intersect_key($data, $rules))) {
+            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'Stuur minstens een van deze velden mee: ' . implode(', ', array_keys($rules)) . '.');
+        }
 
         foreach ($rules as $field => $ruleString) {
             $fieldRules = explode('|', $ruleString);
             $value = $data[$field] ?? null;
+
+            if ($partial && !array_key_exists($field, $data)) {
+                continue;
+            }
 
             if ($value === null || $value === '') {
                 if (in_array('required', $fieldRules)) {

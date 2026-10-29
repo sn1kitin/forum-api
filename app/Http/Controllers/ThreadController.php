@@ -71,6 +71,29 @@ class ThreadController extends Controller
         ApiResponse::send($thread, ApiResponse::CREATED);
     }
 
+    // PUT /threads/{id}
+    public function update(int $id, array $data): void
+    {
+        $this->save($id, $data, false);
+    }
+
+    // PATCH /threads/{id}
+    public function patch(int $id, array $data): void
+    {
+        $this->save($id, $data, true);
+    }
+
+    private function save(int $id, array $data, bool $partial): void
+    {
+        if (ThreadModel::find($id) === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Thread {$id} bestaat niet.");
+        }
+
+        $this->validate($data, self::RULES, $partial);
+
+        ApiResponse::send(ThreadModel::update($id, $data));
+    }
+
     // DELETE /threads/{id} -> geeft terug wat er verwijderd is
     public function destroy(int $id): void
     {

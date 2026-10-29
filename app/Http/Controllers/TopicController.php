@@ -58,6 +58,29 @@ class TopicController extends Controller
         ApiResponse::send($topic, ApiResponse::CREATED);
     }
 
+    // PUT /topics/{id}
+    public function update(int $id, array $data): void
+    {
+        $this->save($id, $data, false);
+    }
+
+    // PATCH /topics/{id}
+    public function patch(int $id, array $data): void
+    {
+        $this->save($id, $data, true);
+    }
+
+    private function save(int $id, array $data, bool $partial): void
+    {
+        if (TopicModel::find($id) === null) {
+            ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$id} bestaat niet.");
+        }
+
+        $this->validate($data, self::RULES, $partial);
+
+        ApiResponse::send(TopicModel::update($id, $data));
+    }
+
     // DELETE /topics/{id} -> geeft terug wat er verwijderd is
     public function destroy(int $id): void
     {
