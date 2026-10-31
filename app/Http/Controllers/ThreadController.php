@@ -5,13 +5,14 @@ use App\Http\ApiResponse;
 use App\Models\ReplyModel;
 use App\Models\ThreadModel;
 use App\Models\TopicModel;
+use App\Models\UserModel;
 
 class ThreadController extends Controller
 {
     private const RULES = [
         'title' => 'required|string|max:100',
         'description' => 'required|string',
-        'user_id' => 'required|int',
+        'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
     // GET /threads

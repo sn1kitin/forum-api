@@ -5,6 +5,7 @@ use App\Http\ApiResponse;
 use App\Models\ReplyModel;
 use App\Models\ThreadModel;
 use App\Models\TopicModel;
+use App\Models\UserModel;
 
 class TopicController extends Controller
 {
@@ -12,7 +13,7 @@ class TopicController extends Controller
         'title' => 'required|string|max:100',
         'body' => 'required|string',
         'thread_id' => 'required|int|exists:' . ThreadModel::class,
-        'user_id' => 'required|int',
+        'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
     // GET /topics

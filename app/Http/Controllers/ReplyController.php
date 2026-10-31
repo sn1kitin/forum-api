@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 use App\Http\ApiResponse;
 use App\Models\ReplyModel;
 use App\Models\TopicModel;
+use App\Models\UserModel;
 
 class ReplyController extends Controller
 {
     private const RULES = [
         'body' => 'required|string',
         'topic_id' => 'required|int|exists:' . TopicModel::class,
-        'user_id' => 'required|int',
+        'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
     // GET /replies
