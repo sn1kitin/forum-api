@@ -52,7 +52,7 @@ class ApiResponse
         exit;
     }
 
-    // antwoord op de preflight van de browser (OPTIONS)
+    // Antwoord op de CORS-preflight: de browser vraagt eerst met OPTIONS wat er mag
     public static function preflight(): void
     {
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');

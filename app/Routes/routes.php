@@ -6,11 +6,10 @@ use App\Http\Controllers\ReplyController;
 
 return [
     'GET' => [
-        '' => [ThreadController::class, 'index'],
+        '/' => [ThreadController::class, 'index'],
         'threads' => [ThreadController::class, 'index'],
         'threads/{id}' => [ThreadController::class, 'show'],
         'threads/{id}/topics' => [ThreadController::class, 'topics'],
-        'threads/{id}/topics/{id}' => [ThreadController::class, 'topic'],
         'topics' => [TopicController::class, 'index'],
         'topics/{id}' => [TopicController::class, 'show'],
         'topics/{id}/replies' => [TopicController::class, 'replies'],

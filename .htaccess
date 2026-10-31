@@ -1,9 +1,30 @@
 <IfModule mod_rewrite.c>
     Options -MultiViews -Indexes
     RewriteEngine On
+    RewriteBase /forum-api/
 
-    # alles naar index.php, de url wordt uitgelezen in de RequestHandler
+    # Deze mappen en bestanden mogen niet van buitenaf bereikbaar zijn
+    RewriteRule ^(app|vendor)(/|$) - [F,L]
+    RewriteRule ^composer\.(json|lock)$ - [F,L]
+
+    # http://localhost/forum-api/threads/1/topics
+    # voor een thread met topics, zoals opdracht 6 uit het lesboek
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^ index.php [QSA,L]
+    RewriteRule ^([^/]+)/([^/]+)/([^/]+)/?$ index.php?resource=$1&id=$2&relation=$3 [L,QSA]
+
+    # http://localhost/forum-api/threads/1
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^/]+)/([^/]+)/?$ index.php?resource=$1&id=$2 [L,QSA]
+
+    # http://localhost/forum-api/threads
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^/]+)/?$ index.php?resource=$1 [L,QSA]
+
+    # andere urls (bv met te veel delen) ook naar index.php, dan geeft de api zelf een 404 in json
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)$ index.php?resource=$1 [L,QSA]
 </IfModule>

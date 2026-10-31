@@ -5,51 +5,56 @@ class RequestHandler
 {
     private array $routes;
     private string $method;
-    // bv threads/{id}/topics
-    private string $key = '';
-    private array $ids = [];
+    private string $resource = '/';
+    private ?int $id = null;
+    // bv topics bij /threads/1/topics
+    private ?string $relation = null;
 
     public function __construct(array $routes)
     {
         $this->routes = $routes;
         $this->method = strtoupper($_SERVER['REQUEST_METHOD']);
 
-        $this->parseUrl();
+        $this->parseURI();
     }
 
-    // met resource en id via de htaccess kon ik geen /threads/1/topics doen, dus nu lees ik de url zelf uit
-    private function parseUrl(): void
+    // Haalt de resource, het id en de relation uit de URL (die .htaccess in $_GET heeft gezet)
+    private function parseURI(): void
     {
-        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-        // projectmap eraf halen, bv /forum-api
-        $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-        if ($base !== '' && str_starts_with($path, $base)) {
-            $path = substr($path, strlen($base));
+        if (isset($_GET['resource'])) {
+            $this->resource = strtolower($_GET['resource']);
+        } else {
+            $this->resource = '/';
         }
 
-        $segments = array_values(array_filter(explode('/', strtolower($path)), fn($s) => $s !== ''));
-
-        // threads/5/topics/3 -> even posities zijn resources, oneven posities zijn ids
-        $parts = [];
-        foreach ($segments as $i => $segment) {
-            if ($i % 2 === 0) {
-                $parts[] = $segment;
-                continue;
-            }
-
-            if (!ctype_digit($segment) || (int) $segment < 1) {
+        if (isset($_GET['id'])) {
+            if (!ctype_digit($_GET['id']) || (int) $_GET['id'] < 1) {
                 ApiResponse::error(ApiResponse::BAD_REQUEST, 'Het id moet een positief geheel getal zijn.');
             }
 
-            $this->ids[] = (int) $segment;
-            $parts[] = '{id}';
+            $this->id = (int) $_GET['id'];
         }
 
-        $this->key = implode('/', $parts);
+        if (isset($_GET['relation'])) {
+            $this->relation = strtolower($_GET['relation']);
+        }
     }
 
-    // json body of gewone formdata
+    // Maakt de sleutel om in routes.php te zoeken: 'threads', 'threads/{id}' of 'threads/{id}/topics'
+    private function getRouteKey(): string
+    {
+        if ($this->id === null) {
+            return $this->resource;
+        }
+
+        if ($this->relation !== null) {
+            return $this->resource . '/{id}/' . $this->relation;
+        }
+
+        return $this->resource . '/{id}';
+    }
+
+    // Leest de data die de client in de body heeft gestuurd (json of gewone formdata)
     private function getBody(): array
     {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -73,12 +78,13 @@ class RequestHandler
         return $_POST;
     }
 
+    // Geeft de methodes die wel bestaan voor deze url (nodig voor de 405)
     private function allowedMethods(): array
     {
         $allowed = [];
 
         foreach ($this->routes as $method => $routes) {
-            if (isset($routes[$this->key])) {
+            if (isset($routes[$this->getRouteKey()])) {
                 $allowed[] = $method;
             }
         }
@@ -93,7 +99,7 @@ class RequestHandler
             ApiResponse::preflight();
         }
 
-        $route = $this->routes[$this->method][$this->key] ?? null;
+        $route = $this->routes[$this->method][$this->getRouteKey()] ?? null;
 
         if ($route === null) {
             $allowed = $this->allowedMethods();
@@ -110,8 +116,12 @@ class RequestHandler
         [$class, $action] = $route;
         $controller = new $class();
 
-        // eerst de ids uit de url, daarna de body
-        $args = $this->ids;
+        // eerst het id uit de url, daarna de body
+        $args = [];
+
+        if ($this->id !== null) {
+            $args[] = $this->id;
+        }
 
         if ($this->method === 'POST') {
             $args[] = $this->getBody();

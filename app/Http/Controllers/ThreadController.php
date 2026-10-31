@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\ApiResponse;
-use App\Models\ReplyModel;
 use App\Models\ThreadModel;
 use App\Models\TopicModel;
 use App\Models\UserModel;
@@ -45,20 +44,6 @@ class ThreadController extends Controller
         $thread['topics'] = TopicModel::where('thread_id', $id);
 
         ApiResponse::send($thread);
-    }
-
-    // GET /threads/{id}/topics/{id} -> een topic binnen een thread, met replies
-    public function topic(int $threadId, int $topicId): void
-    {
-        $topic = TopicModel::find($topicId);
-
-        if ($topic === null || (int) $topic['thread_id'] !== $threadId) {
-            ApiResponse::error(ApiResponse::NOT_FOUND, "Topic {$topicId} bestaat niet in thread {$threadId}.");
-        }
-
-        $topic['replies'] = ReplyModel::where('topic_id', $topicId);
-
-        ApiResponse::send($topic);
     }
 
     // POST /threads
