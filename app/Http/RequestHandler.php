@@ -70,7 +70,14 @@ class RequestHandler
             return $data;
         }
 
-        return $_POST;
+        if ($this->method === 'POST') {
+            return $_POST;
+        }
+
+        // bij PUT en PATCH vult php $_POST niet, dus zelf de body uitlezen
+        parse_str(file_get_contents('php://input'), $data);
+
+        return $data;
     }
 
     private function allowedMethods(): array
