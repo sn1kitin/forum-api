@@ -49,7 +49,11 @@ class ThreadController extends Controller
     // POST /threads
     public function create(array $data): void
     {
-        $this->validate($data, self::RULES);
+        $errors = $this->validate($data, self::RULES);
+
+        if (!empty($errors)) {
+            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
+        }
 
         $thread = ThreadModel::create($data);
 

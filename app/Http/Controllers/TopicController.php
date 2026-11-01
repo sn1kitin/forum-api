@@ -51,7 +51,11 @@ class TopicController extends Controller
     // POST /topics
     public function create(array $data): void
     {
-        $this->validate($data, self::RULES);
+        $errors = $this->validate($data, self::RULES);
+
+        if (!empty($errors)) {
+            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
+        }
 
         $topic = TopicModel::create($data);
 

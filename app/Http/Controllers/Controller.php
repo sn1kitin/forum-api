@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Http\ApiResponse;
-
 abstract class Controller
 {
-    // regels zoals 'required|string|max:100', stuurt meteen een 422 als er fouten zijn
-    protected function validate(array $data, array $rules): void
+    // Controleert de data met regels zoals 'required|string|max:100'.
+    // Geeft een array met foutmeldingen terug (leeg = alles in orde).
+    protected function validate(array $data, array $rules): array
     {
         $errors = [];
 
@@ -14,6 +13,7 @@ abstract class Controller
             $fieldRules = explode('|', $ruleString);
             $value = $data[$field] ?? null;
 
+            // Veld ontbreekt of is leeg
             if ($value === null || $value === '') {
                 if (in_array('required', $fieldRules)) {
                     $errors[$field] = "Het veld {$field} is verplicht.";
@@ -22,51 +22,38 @@ abstract class Controller
             }
 
             foreach ($fieldRules as $rule) {
-                $error = $this->checkRule($field, $value, $rule);
-
-                if ($error !== null) {
-                    $errors[$field] = $error;
+                if ($rule === 'string' && !is_string($value)) {
+                    $errors[$field] = "Het veld {$field} moet tekst zijn.";
                     break;
+                }
+
+                if ($rule === 'int' && filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
+                    $errors[$field] = "Het veld {$field} moet een positief geheel getal zijn.";
+                    break;
+                }
+
+                // bv 'max:100' -> 100
+                if (str_starts_with($rule, 'max:')) {
+                    $max = (int) substr($rule, 4);
+
+                    if (is_string($value) && mb_strlen($value) > $max) {
+                        $errors[$field] = "Het veld {$field} mag maximaal {$max} tekens zijn.";
+                        break;
+                    }
+                }
+
+                // bv 'exists:App\Models\ThreadModel': het id moet in die tabel staan (altijd na int zetten)
+                if (str_starts_with($rule, 'exists:')) {
+                    $modelClass = substr($rule, 7);
+
+                    if ($modelClass::find((int) $value) === null) {
+                        $errors[$field] = "Het veld {$field} verwijst naar id {$value}, maar die bestaat niet.";
+                        break;
+                    }
                 }
             }
         }
 
-        if (!empty($errors)) {
-            ApiResponse::error(ApiResponse::UNPROCESSABLE, 'De invoer is niet geldig.', $errors);
-        }
-    }
-
-    private function checkRule(string $field, mixed $value, string $rule): ?string
-    {
-        [$name, $param] = array_pad(explode(':', $rule, 2), 2, null);
-
-        switch ($name) {
-            case 'string':
-                if (!is_string($value)) {
-                    return "Het veld {$field} moet tekst zijn.";
-                }
-                break;
-
-            case 'int':
-                if (filter_var($value, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) === false) {
-                    return "Het veld {$field} moet een positief geheel getal zijn.";
-                }
-                break;
-
-            case 'max':
-                if (is_string($value) && mb_strlen($value) > (int) $param) {
-                    return "Het veld {$field} mag maximaal {$param} tekens zijn.";
-                }
-                break;
-
-            // exists:App\Models\ThreadModel -> id moet in die tabel staan (altijd na int zetten)
-            case 'exists':
-                if ($param::find((int) $value) === null) {
-                    return "Het veld {$field} verwijst naar id {$value}, maar die bestaat niet.";
-                }
-                break;
-        }
-
-        return null;
+        return $errors;
     }
 }

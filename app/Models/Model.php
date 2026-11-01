@@ -11,7 +11,7 @@ abstract class Model
 
     private static ?Database $db = null;
 
-    // een verbinding voor alle models
+    // Eén databaseverbinding voor alle models, wordt de eerste keer aangemaakt
     protected static function db(): Database
     {
         if (self::$db === null) {
