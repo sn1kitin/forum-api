@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(100) NOT NULL,
     `username` VARCHAR(30) NOT NULL UNIQUE,
     `email` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
@@ -43,11 +44,11 @@ CREATE TABLE `replies` (
     `updated_at` DATETIME NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `users` (`username`, `email`, `password`, `created_at`) VALUES
-('admin', 'admin@forum.test', '$2y$10$PtdbmfGH8x7j3CVhgxiirOzPCARll36AyaRwoAQWOlP8VQtk5tOim', '2026-09-01 08:00:00'),
-('jan', 'jan@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00'),
-('sara', 'sara@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00'),
-('timmie', 'tim@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00');
+INSERT INTO `users` (`name`, `username`, `email`, `password`, `created_at`) VALUES
+('Admin', 'admin', 'admin@forum.test', '$2y$10$PtdbmfGH8x7j3CVhgxiirOzPCARll36AyaRwoAQWOlP8VQtk5tOim', '2026-09-01 08:00:00'),
+('Jan de Vries', 'jan', 'jan@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00'),
+('Sara Bakker', 'sara', 'sara@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00'),
+('Tim Jansen', 'timmie', 'tim@forum.test', '$2y$10$c/1Lbiejhz9eZ1FNLa1/rupUFdwHAENJuQ1iNH.LGND3cz.xK7rXu', '2026-09-01 08:00:00');
 
 INSERT INTO `threads` (`user_id`, `title`, `description`, `created_at`) VALUES
 (1, 'Nisi in aliquip', 'Reprehenderit officia in aliquip mollit labore voluptate consectetur.', '2026-09-01 17:00:39'),
