@@ -14,13 +14,11 @@ class ReplyController extends Controller
         'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
-    // GET /replies
     public function index(): void
     {
         ApiResponse::send(ReplyModel::all());
     }
 
-    // GET /replies/{id}
     public function show(int $id): void
     {
         $reply = ReplyModel::find($id);
@@ -32,7 +30,6 @@ class ReplyController extends Controller
         ApiResponse::send($reply);
     }
 
-    // POST /replies
     public function create(array $data): void
     {
         $errors = $this->validate($data, self::RULES);

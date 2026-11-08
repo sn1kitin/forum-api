@@ -7,7 +7,6 @@ class RequestHandler
     private string $method;
     private string $resource = '/';
     private ?int $id = null;
-    // bv topics bij /threads/1/topics
     private ?string $relation = null;
 
     public function __construct(array $routes)
@@ -18,7 +17,6 @@ class RequestHandler
         $this->parseURI();
     }
 
-    // Haalt de resource, het id en de relation uit de URL (die .htaccess in $_GET heeft gezet)
     private function parseURI(): void
     {
         if (isset($_GET['resource'])) {
@@ -40,7 +38,6 @@ class RequestHandler
         }
     }
 
-    // Maakt de sleutel om in routes.php te zoeken: 'threads', 'threads/{id}' of 'threads/{id}/topics'
     private function getRouteKey(): string
     {
         if ($this->id === null) {
@@ -54,7 +51,6 @@ class RequestHandler
         return $this->resource . '/{id}';
     }
 
-    // Leest de data die de client in de body heeft gestuurd (json of gewone formdata)
     private function getBody(): array
     {
         $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -78,7 +74,6 @@ class RequestHandler
         return $_POST;
     }
 
-    // Geeft de methodes die wel bestaan voor deze url (nodig voor de 405)
     private function allowedMethods(): array
     {
         $allowed = [];
@@ -94,7 +89,6 @@ class RequestHandler
 
     public function handle(): void
     {
-        // CORS preflight van de browser
         if ($this->method === 'OPTIONS') {
             ApiResponse::preflight();
         }
@@ -116,17 +110,16 @@ class RequestHandler
         [$class, $action] = $route;
         $controller = new $class();
 
-        // eerst het id uit de url, daarna de body
-        $args = [];
+        $arguments = [];
 
         if ($this->id !== null) {
-            $args[] = $this->id;
+            $arguments[] = $this->id;
         }
 
         if ($this->method === 'POST') {
-            $args[] = $this->getBody();
+            $arguments[] = $this->getBody();
         }
 
-        $controller->$action(...$args);
+        $controller->$action(...$arguments);
     }
 }

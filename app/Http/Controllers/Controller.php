@@ -3,8 +3,7 @@ namespace App\Http\Controllers;
 
 abstract class Controller
 {
-    // Controleert de data met regels zoals 'required|string|max:100'.
-    // Geeft een array met foutmeldingen terug (leeg = alles in orde).
+    // geeft een array met fouten terug, leeg = alles in orde
     protected function validate(array $data, array $rules): array
     {
         $errors = [];
@@ -13,7 +12,6 @@ abstract class Controller
             $fieldRules = explode('|', $ruleString);
             $value = $data[$field] ?? null;
 
-            // Veld ontbreekt of is leeg
             if ($value === null || $value === '') {
                 if (in_array('required', $fieldRules)) {
                     $errors[$field] = "Het veld {$field} is verplicht.";
@@ -32,7 +30,6 @@ abstract class Controller
                     break;
                 }
 
-                // bv 'max:100' -> 100
                 if (str_starts_with($rule, 'max:')) {
                     $max = (int) substr($rule, 4);
 
@@ -42,7 +39,6 @@ abstract class Controller
                     }
                 }
 
-                // bv 'exists:App\Models\ThreadModel': het id moet in die tabel staan (altijd na int zetten)
                 if (str_starts_with($rule, 'exists:')) {
                     $modelClass = substr($rule, 7);
 

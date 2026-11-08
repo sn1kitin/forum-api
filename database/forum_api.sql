@@ -12,8 +12,7 @@ CREATE TABLE `users` (
     `username` VARCHAR(30) NOT NULL UNIQUE,
     `email` VARCHAR(255) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
-    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `threads` (
@@ -21,8 +20,7 @@ CREATE TABLE `threads` (
     `user_id` INT UNSIGNED NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `description` TEXT NOT NULL,
-    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `topics` (
@@ -31,8 +29,7 @@ CREATE TABLE `topics` (
     `user_id` INT UNSIGNED NOT NULL,
     `title` VARCHAR(100) NOT NULL,
     `body` TEXT NOT NULL,
-    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `replies` (
@@ -40,8 +37,7 @@ CREATE TABLE `replies` (
     `topic_id` INT UNSIGNED NOT NULL,
     `user_id` INT UNSIGNED NOT NULL,
     `body` TEXT NOT NULL,
-    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NULL DEFAULT NULL
+    `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `users` (`name`, `username`, `email`, `password`, `created_at`) VALUES

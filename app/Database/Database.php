@@ -6,7 +6,6 @@ use PDOStatement;
 
 class Database
 {
-    // XAMPP standaard: root zonder wachtwoord
     private string $host = '127.0.0.1';
     private string $dbName = 'forum_api_db';
     private string $user = 'root';

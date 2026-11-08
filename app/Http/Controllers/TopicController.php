@@ -16,13 +16,11 @@ class TopicController extends Controller
         'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
-    // GET /topics
     public function index(): void
     {
         ApiResponse::send(TopicModel::all());
     }
 
-    // GET /topics/{id}
     public function show(int $id): void
     {
         $topic = TopicModel::find($id);
@@ -34,7 +32,6 @@ class TopicController extends Controller
         ApiResponse::send($topic);
     }
 
-    // GET /topics/{id}/replies -> topic met al zijn replies
     public function replies(int $id): void
     {
         $topic = TopicModel::find($id);
@@ -48,7 +45,6 @@ class TopicController extends Controller
         ApiResponse::send($topic);
     }
 
-    // POST /topics
     public function create(array $data): void
     {
         $errors = $this->validate($data, self::RULES);

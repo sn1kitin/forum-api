@@ -14,13 +14,11 @@ class ThreadController extends Controller
         'user_id' => 'required|int|exists:' . UserModel::class,
     ];
 
-    // GET /threads
     public function index(): void
     {
         ApiResponse::send(ThreadModel::all());
     }
 
-    // GET /threads/{id}
     public function show(int $id): void
     {
         $thread = ThreadModel::find($id);
@@ -32,7 +30,6 @@ class ThreadController extends Controller
         ApiResponse::send($thread);
     }
 
-    // GET /threads/{id}/topics -> thread met al zijn topics
     public function topics(int $id): void
     {
         $thread = ThreadModel::find($id);
@@ -46,7 +43,6 @@ class ThreadController extends Controller
         ApiResponse::send($thread);
     }
 
-    // POST /threads
     public function create(array $data): void
     {
         $errors = $this->validate($data, self::RULES);

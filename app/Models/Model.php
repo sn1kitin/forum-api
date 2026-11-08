@@ -11,7 +11,6 @@ abstract class Model
 
     private static ?Database $db = null;
 
-    // Eén databaseverbinding voor alle models, wordt de eerste keer aangemaakt
     protected static function db(): Database
     {
         if (self::$db === null) {
@@ -42,7 +41,6 @@ abstract class Model
         return self::db()->fetch();
     }
 
-    // alle rijen waar een kolom een bepaalde waarde heeft, bv alle topics van een thread
     public static function where(string $column, mixed $value): array
     {
         $table = static::$table;
@@ -57,7 +55,6 @@ abstract class Model
 
         $data = static::onlyFillable($data);
         $data['created_at'] = date('Y-m-d H:i:s');
-        $data['updated_at'] = date('Y-m-d H:i:s');
 
         $columns = array_keys($data);
         $columnList = '`' . implode('`, `', $columns) . '`';

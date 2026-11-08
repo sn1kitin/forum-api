@@ -24,6 +24,17 @@ class ApiResponse
         500 => 'Internal Server Error',
     ];
 
+    private static function base(int $status, int $count): array
+    {
+        return [
+            'api_version' => self::API_VERSION,
+            'api_name' => self::API_NAME,
+            'count' => $count,
+            'status' => $status,
+            'status_message' => self::MESSAGES[$status] ?? '',
+        ];
+    }
+
     public static function send(mixed $data, int $status = self::OK): void
     {
         self::headers($status);
@@ -52,18 +63,15 @@ class ApiResponse
         exit;
     }
 
-    // Antwoord op de CORS-preflight: de browser vraagt eerst met OPTIONS wat er mag
     public static function preflight(): void
     {
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
         header('Access-Control-Allow-Headers: Content-Type, Accept');
         header('Access-Control-Max-Age: 86400');
 
-        // ook hier de vaste json structuur
         self::send(null);
     }
 
-    // volledige url voor de Location header, bv http://localhost/forum-api/threads/5
     public static function url(string $path): string
     {
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -80,19 +88,6 @@ class ApiResponse
         header('Content-Type: application/json; charset=utf-8');
     }
 
-    // deze velden moeten in elke response zitten
-    private static function base(int $status, int $count): array
-    {
-        return [
-            'api_version' => self::API_VERSION,
-            'api_name' => self::API_NAME,
-            'count' => $count,
-            'status' => $status,
-            'status_message' => self::MESSAGES[$status] ?? '',
-        ];
-    }
-
-    // lijst = aantal items, een record = 1, niks = 0
     private static function count(mixed $data): int
     {
         if ($data === null) {

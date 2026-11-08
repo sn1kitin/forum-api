@@ -1,0 +1,400 @@
+{
+    "info": {
+        "name": "Forum API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Threads",
+            "item": [
+                {
+                    "name": "Alle threads",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/threads",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Een thread",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/threads/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Thread met topics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/threads/1/topics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads",
+                                "1",
+                                "topics"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Thread maken",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/threads",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Lorem ipsum\",\n    \"description\": \"Dolor sit amet consectetur.\",\n    \"user_id\": 2\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Topics",
+            "item": [
+                {
+                    "name": "Alle topics",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/topics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Een topic",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/topics/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Topic met replies",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/topics/1/replies",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics",
+                                "1",
+                                "replies"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Topic maken",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/topics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Mijn vraag\",\n    \"body\": \"Lorem ipsum dolor sit amet.\",\n    \"thread_id\": 1,\n    \"user_id\": 2\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Replies",
+            "item": [
+                {
+                    "name": "Alle replies",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/replies",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "replies"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Een reply",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/replies/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "replies",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Reply maken",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/replies",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "replies"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"body\": \"Ut enim ad minim veniam.\",\n    \"topic_id\": 1,\n    \"user_id\": 3\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fouten",
+            "item": [
+                {
+                    "name": "400 id is geen getal",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/threads/abc",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads",
+                                "abc"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "404 thread bestaat niet",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/threads/999",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads",
+                                "999"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "404 route bestaat niet",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/bestaatniet",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "bestaatniet"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "405 methode niet toegestaan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/threads/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "threads",
+                                "1"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"x\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "422 lege velden",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/topics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "[]",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "422 user bestaat niet",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/topics",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "topics"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Test\",\n    \"body\": \"Test\",\n    \"thread_id\": 1,\n    \"user_id\": 999\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost/forum-api"
+        }
+    ]
+}
